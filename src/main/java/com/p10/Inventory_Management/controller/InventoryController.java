@@ -1,5 +1,6 @@
-package com.p10.Inventory_Management;
+package com.p10.Inventory_Management.controller;
 
+import com.p10.Inventory_Management.dto.InventoryDTO;
 import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +17,26 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @PostMapping("/create")
-    public Article addArticle(@RequestBody Article article) {
-        return inventoryService.addArticle(article);
+    public InventoryDTO addArticle(@RequestBody InventoryDTO inventoryDTO) {
+        return inventoryService.addArticle(inventoryDTO);
     }
 
     @GetMapping("/listAll")
-    public List<Article> viewAllArticles() {
+    public List<InventoryDTO> viewAllArticles() {
         return inventoryService.getAllArticle();
     }
 
     @GetMapping("/find/{articleId}")
-    public ResponseEntity<Article> viewArticle(@PathVariable("articleId") Long articleId) {
+    public ResponseEntity<InventoryDTO> viewArticle(@PathVariable("articleId") Long articleId) {
         return inventoryService.getArticleById(articleId)
+                .map(inventoryService::mapToDTO)// Convert Article to DTO
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/updateQuantity/{articleId}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long articleId, @RequestParam int quantity) {
-        Article updatedArticle = inventoryService.updateQuantity(articleId,quantity);
+    public ResponseEntity<InventoryDTO> updateArticle(@PathVariable Long articleId, @RequestParam int quantity) {
+        InventoryDTO updatedArticle = inventoryService.updateQuantity(articleId,quantity);
         if(updatedArticle != null) {
             return ResponseEntity.ok(updatedArticle);
         }
