@@ -1,12 +1,12 @@
 package com.p10.Inventory_Management.controller;
 
 import com.p10.Inventory_Management.dto.InventoryDTO;
-import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -48,5 +48,15 @@ public class InventoryController {
     public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId) {
         inventoryService.deleteArticleById(articleId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/assign/{articleId}/{empId}")
+    public ResponseEntity<InventoryDTO> assignArticle(@PathVariable Long articleId, @PathVariable Long empId, @RequestParam String issueDate) {
+        System.out.println("Received articleId: " + articleId + ", empId: " + empId + ", issueDate: " + issueDate);
+        InventoryDTO updatedArticle = inventoryService.assignArticleToEmployee(articleId,empId,LocalDate.parse(issueDate));
+        if(updatedArticle != null) {
+            return ResponseEntity.ok(updatedArticle);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

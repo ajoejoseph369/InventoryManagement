@@ -1,6 +1,8 @@
 package com.p10.Inventory_Management.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "inventory")
 public class Article {
@@ -16,6 +18,15 @@ public class Article {
     private String make;
     @Column
     private String connectionType;
+
+    @ManyToOne
+    @JoinColumn(name = "empId")
+    private Employee assignedTo;
+
+    @Column(nullable = false)
+    private Boolean assigned = false;
+    @Column
+    private LocalDate dateOfIssue;
 
     public Long getArticleId() {
         return articleId;
@@ -57,4 +68,27 @@ public class Article {
         this.connectionType = connectionType;
     }
 
+    public Employee getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(Employee assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public boolean isAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+        this.assigned = assigned;
+    }
+
+    public LocalDate getDateOfIssue() {
+        return dateOfIssue;
+    }
+
+    public void setDateOfIssue(LocalDate dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
+    }
 }
