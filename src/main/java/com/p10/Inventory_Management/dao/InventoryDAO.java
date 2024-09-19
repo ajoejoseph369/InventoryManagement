@@ -30,4 +30,25 @@ public class InventoryDAO {
         inventoryRepository.deleteById(articleId);
     }
 
+    public List<Article> findByName(String name) {
+        return inventoryRepository.findArticleByArticle(name);
+    }
+
+    public List<Article> findByAssigned(){
+        return inventoryRepository.findArticleByAssigned();
+    }
+
+    public void deleteMultipleArticles(List<Long> articles) {
+        inventoryRepository.deleteArticleByArticleIds(articles);
+    }
+
+    public Long countArticleByArticle(String article) {
+        return inventoryRepository.countArticleByArticle(article);
+    }
+
+    public List<Article> findArticleByEmpId(Long empId) {
+        return inventoryRepository.findArticlesByEmployeeId(empId);
+    }
+
+
 }

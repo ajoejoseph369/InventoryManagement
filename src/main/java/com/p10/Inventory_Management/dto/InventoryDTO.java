@@ -13,10 +13,11 @@ public class InventoryDTO {
     private boolean assigned;
     private Employee assignedTo;
     private LocalDate dateOfIssue;
+    private Boolean defective;
 
     public InventoryDTO() {}
 
-    public InventoryDTO(String article, int quantity, String make, String connectionType, boolean assigned, Employee assignedTo, LocalDate dateOfIssue) {
+    public InventoryDTO(String article, int quantity, String make, String connectionType, boolean assigned, Employee assignedTo, LocalDate dateOfIssue, Boolean defective) {
 //        this.articleId = articleId;
         this.article = article;
         this.quantity = quantity;
@@ -25,6 +26,7 @@ public class InventoryDTO {
         this.assigned = assigned;
         this.assignedTo = assignedTo;
         this.dateOfIssue = dateOfIssue;
+        this.defective = defective;
     }
 
 //    public Long getArticleId() {
@@ -89,5 +91,13 @@ public class InventoryDTO {
 
     public void setAssigned(boolean assigned) {
         this.assigned = assigned;
+    }
+
+    public Boolean getDefective() {
+        return defective;
+    }
+
+    public void setDefective(Boolean defective) {
+        this.defective = defective;
     }
 }

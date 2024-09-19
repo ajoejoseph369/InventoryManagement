@@ -1,6 +1,7 @@
 package com.p10.Inventory_Management.controller;
 
 import com.p10.Inventory_Management.dto.InventoryDTO;
+import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,11 +53,49 @@ public class InventoryController {
 
     @PutMapping("/assign/{articleId}/{empId}")
     public ResponseEntity<InventoryDTO> assignArticle(@PathVariable Long articleId, @PathVariable Long empId, @RequestParam String issueDate) {
-        System.out.println("Received articleId: " + articleId + ", empId: " + empId + ", issueDate: " + issueDate);
+//        System.out.println("Received articleId: " + articleId + ", empId: " + empId + ", issueDate: " + issueDate);
         InventoryDTO updatedArticle = inventoryService.assignArticleToEmployee(articleId,empId,LocalDate.parse(issueDate));
         if(updatedArticle != null) {
             return ResponseEntity.ok(updatedArticle);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/markDefective/{articleId}")
+    public ResponseEntity<InventoryDTO> markDefective(@PathVariable Long articleId) {
+        InventoryDTO updatedArticle = inventoryService.updateCondition(articleId);
+        return ResponseEntity.ok(updatedArticle);
+    }
+
+    @PutMapping("/updateMake/{articleId}")
+    public ResponseEntity<InventoryDTO> updateMake(@PathVariable Long articleId, @RequestParam String make) {
+        InventoryDTO updatedArticle = inventoryService.updateMake(articleId,make);
+        return ResponseEntity.ok(updatedArticle);
+    }
+
+    @GetMapping("/search/{article}")
+    public List<Article> searchArticle(@PathVariable String article) {
+        return inventoryService.findArticleByArticle((article));
+    }
+
+    @GetMapping("/get/unassigned")
+    public List<Article> getUnassigned() {
+        return  inventoryService.findArticleByAssigned();
+    }
+
+    @DeleteMapping("/deleteArticles")
+    public ResponseEntity<Void> deleteMultipleArticles(@RequestParam List<Long> articleIds){
+        inventoryService.deleteMultipleArticles(articleIds);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/count/{article}")
+    public Long countArticle(@PathVariable String article) {
+        return inventoryService.countArticlesByArticle(article);
+    }
+
+    @GetMapping("/findAssignedTo/{empId}")
+    public List<Article> findAssignedTo(@PathVariable Long empId) {
+        return inventoryService.findArticlesByEmpId(empId);
     }
 }

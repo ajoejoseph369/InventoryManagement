@@ -10,6 +10,7 @@ import com.p10.Inventory_Management.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,6 +23,8 @@ public class InventoryService {
 
     @Autowired
     private EmployeeDAO employeeDAO;
+    @Autowired
+    private InventoryRepository inventoryRepository;
 
     public InventoryDTO addArticle(InventoryDTO inventoryDTO){
         Article article = mapToEntity(inventoryDTO);
@@ -55,7 +58,7 @@ public class InventoryService {
     }
 
     public InventoryDTO mapToDTO(Article article){
-        return new InventoryDTO(article.getArticle(), article.getQuantity(), article.getMake(), article.getConnectionType(), article.isAssigned(), article.getAssignedTo(), article.getDateOfIssue() );
+        return new InventoryDTO(article.getArticle(), article.getQuantity(), article.getMake(), article.getConnectionType(), article.isAssigned(), article.getAssignedTo(), article.getDateOfIssue(), article.getDefective() );
     }
 
     private Article mapToEntity(InventoryDTO inventoryDTO){
@@ -68,6 +71,7 @@ public class InventoryService {
         article.setAssigned(inventoryDTO.isAssigned());
         article.setAssignedTo(inventoryDTO.getAssignedTo());
         article.setDateOfIssue(inventoryDTO.getDateOfIssue());
+        article.setDefective(inventoryDTO.getDefective());
         return article;
     }
 
@@ -84,6 +88,47 @@ public class InventoryService {
             return mapToDTO(savedArticle);
         }
         return null;
+    }
+
+    public InventoryDTO updateCondition(Long articleId){
+        Optional<Article> article = inventoryDAO.findById(articleId);
+        if(article.isPresent()){
+            article.get().setDefective(true);
+            Article updatedArticle = inventoryDAO.save(article.get());
+            return mapToDTO(updatedArticle);
+        }
+        return null;
+    }
+
+    public InventoryDTO updateMake(Long articleId, String make){
+        Optional<Article> article = inventoryDAO.findById(articleId);
+        if(article.isPresent()){
+            article.get().setMake(make);
+            Article savedArticle = inventoryDAO.save(article.get());
+            return mapToDTO(savedArticle);
+        }
+        return null;
+    }
+
+    public List<Article> findArticleByArticle(String articleName){
+        return inventoryDAO.findByName(articleName);
+    }
+
+    public List<Article> findArticleByAssigned(){
+        return inventoryDAO.findByAssigned();
+    }
+
+    @Transactional
+    public void deleteMultipleArticles(List<Long> articleIds){
+        inventoryDAO.deleteMultipleArticles(articleIds);
+    }
+
+    public Long countArticlesByArticle(String articleName){
+        return inventoryDAO.countArticleByArticle(articleName);
+    }
+
+    public List<Article> findArticlesByEmpId(Long empId){
+        return inventoryDAO.findArticleByEmpId(empId);
     }
 }
 

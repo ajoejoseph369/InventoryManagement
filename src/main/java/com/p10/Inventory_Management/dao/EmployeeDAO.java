@@ -16,4 +16,8 @@ public class EmployeeDAO {
     public Optional<Employee> getEmployeeById(Long employeeId) {
         return employeeRepository.findById(employeeId);
     }
+
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 }

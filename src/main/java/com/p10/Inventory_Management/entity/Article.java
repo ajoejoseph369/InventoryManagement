@@ -27,6 +27,8 @@ public class Article {
     private Boolean assigned = false;
     @Column
     private LocalDate dateOfIssue;
+    @Column(nullable = false)
+    private Boolean defective = false;
 
     public Long getArticleId() {
         return articleId;
@@ -90,5 +92,21 @@ public class Article {
 
     public void setDateOfIssue(LocalDate dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
+    }
+
+    public Boolean getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(Boolean assigned) {
+        this.assigned = assigned;
+    }
+
+    public Boolean getDefective() {
+        return defective;
+    }
+
+    public void setDefective(Boolean defective) {
+        this.defective = defective;
     }
 }
