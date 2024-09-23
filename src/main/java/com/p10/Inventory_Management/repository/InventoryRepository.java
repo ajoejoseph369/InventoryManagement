@@ -27,4 +27,13 @@ public interface InventoryRepository extends JpaRepository<Article, Long> {
     @Query("SELECT a FROM Article a WHERE a.assignedTo.empId = :empId")
     List<Article> findArticlesByEmployeeId(@Param("empId") Long empId);
 
+    @Query("SELECT i FROM Article i WHERE i.make = :make")
+    List<Article> findArticleByMake(@Param("make") String make);
+
+    @Query("SELECT COUNT(i) FROM Article i")
+    Long countArticle();
+
+    @Query("SELECT i FROM Article i WHERE i.assigned = true")
+    List<Article> findAssignedArticles();
+
 }

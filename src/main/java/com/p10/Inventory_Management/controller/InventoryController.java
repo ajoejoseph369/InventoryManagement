@@ -98,4 +98,24 @@ public class InventoryController {
     public List<Article> findAssignedTo(@PathVariable Long empId) {
         return inventoryService.findArticlesByEmpId(empId);
     }
+
+    @GetMapping("/findByMake/{make}")
+    public List<Article> findByMake(@PathVariable String make) {
+        return inventoryService.findArticlesByMake(make);
+    }
+
+    @GetMapping("/countTotalArticles")
+    public Long countTotalArticles() {
+        return inventoryService.countTotalArticles();
+    }
+
+    @GetMapping("/getAssignedArticlesList")
+    public List<Article> getAssignedArticlesList() {
+        return inventoryService.findAssignedArticles();
+    }
+
+    @PostMapping("/updateAssignment/{articleId}")
+    public InventoryDTO updateStatus(@PathVariable Long articleId, @RequestParam boolean assignment) {
+        return inventoryService.updateStatus(articleId,assignment);
+    }
 }

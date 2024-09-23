@@ -1,18 +1,18 @@
 package com.p10.Inventory_Management.service;
 
 import com.p10.Inventory_Management.dao.EmployeeDAO;
-import com.p10.Inventory_Management.dto.InventoryDTO;
 import com.p10.Inventory_Management.dao.InventoryDAO;
+import com.p10.Inventory_Management.dto.InventoryDTO;
 import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.entity.Employee;
-import com.p10.Inventory_Management.repository.EmployeeRepository;
 import com.p10.Inventory_Management.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -129,6 +129,28 @@ public class InventoryService {
 
     public List<Article> findArticlesByEmpId(Long empId){
         return inventoryDAO.findArticleByEmpId(empId);
+    }
+
+    public List<Article> findArticlesByMake(String make){
+        return inventoryDAO.findArticlesByMake(make);
+    }
+
+    public Long countTotalArticles(){
+        return inventoryDAO.countTotalArticles();
+    }
+
+    public List<Article> findAssignedArticles(){
+        return inventoryDAO.findAssignedArticles();
+    }
+
+    public InventoryDTO updateStatus(Long articleId, boolean status){
+        Optional<Article> article = inventoryDAO.findById(articleId);
+        if(article.isPresent()){
+            article.get().setAssigned(status);
+            Article savedArticle = inventoryDAO.save(article.get());
+            return mapToDTO(savedArticle);
+        }
+        return null;
     }
 }
 

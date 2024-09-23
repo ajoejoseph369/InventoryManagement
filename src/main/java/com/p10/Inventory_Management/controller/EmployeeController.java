@@ -1,7 +1,6 @@
 package com.p10.Inventory_Management.controller;
 
 import com.p10.Inventory_Management.dto.EmployeeDTO;
-import com.p10.Inventory_Management.entity.Employee;
 import com.p10.Inventory_Management.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

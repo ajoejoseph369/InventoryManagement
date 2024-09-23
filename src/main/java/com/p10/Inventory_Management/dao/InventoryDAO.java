@@ -50,5 +50,16 @@ public class InventoryDAO {
         return inventoryRepository.findArticlesByEmployeeId(empId);
     }
 
+    public List<Article> findArticlesByMake(String make){
+        return inventoryRepository.findArticleByMake(make);
+    }
+
+    public Long countTotalArticles(){
+        return inventoryRepository.countArticle();
+    }
+
+    public List<Article> findAssignedArticles() {
+        return inventoryRepository.findAssignedArticles();
+    }
 
 }
