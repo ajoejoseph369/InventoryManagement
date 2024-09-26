@@ -1,6 +1,8 @@
 package com.p10.Inventory_Management.controller;
 
 import com.p10.Inventory_Management.dto.InventoryDTO;
+import com.p10.Inventory_Management.dto.getUnassignedDTO;
+import com.p10.Inventory_Management.dto.listAllDTO;
 import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class InventoryController {
     }
 
     @GetMapping("/listAll")
-    public List<InventoryDTO> viewAllArticles() {
+    public List<listAllDTO> viewAllArticles() {
         return inventoryService.getAllArticle();
     }
 
@@ -79,7 +81,7 @@ public class InventoryController {
     }
 
     @GetMapping("/get/unassigned")
-    public List<Article> getUnassigned() {
+    public List<getUnassignedDTO> getUnassigned() {
         return  inventoryService.findArticleByAssigned();
     }
 

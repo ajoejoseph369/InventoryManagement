@@ -3,6 +3,8 @@ package com.p10.Inventory_Management.service;
 import com.p10.Inventory_Management.dao.EmployeeDAO;
 import com.p10.Inventory_Management.dao.InventoryDAO;
 import com.p10.Inventory_Management.dto.InventoryDTO;
+import com.p10.Inventory_Management.dto.getUnassignedDTO;
+import com.p10.Inventory_Management.dto.listAllDTO;
 import com.p10.Inventory_Management.entity.Article;
 import com.p10.Inventory_Management.entity.Employee;
 import com.p10.Inventory_Management.repository.InventoryRepository;
@@ -32,10 +34,10 @@ public class InventoryService {
         return mapToDTO(savedArticle);
     }
 
-    public List<InventoryDTO> getAllArticle(){
+    public List<listAllDTO> getAllArticle(){
         List<Article> articles = inventoryDAO.findAll();
         return articles.stream()// Convert the list to a stream
-                .map(this::mapToDTO) // Convert each Article to InventoryDTO
+                .map(this::mapToListAllDTO) // Convert each Article to InventoryDTO
                 .collect(Collectors.toList()); // Collect the transformed DTOs into a List
     }
 
@@ -50,7 +52,9 @@ public class InventoryService {
             Article updatedArticle = inventoryDAO.save(article.get());
             return mapToDTO(updatedArticle);
         }
-        return null;
+        else {
+            return null;
+        }
     }
 
     public void deleteArticleById(Long articleId){
@@ -59,6 +63,14 @@ public class InventoryService {
 
     public InventoryDTO mapToDTO(Article article){
         return new InventoryDTO(article.getArticle(), article.getQuantity(), article.getMake(), article.getConnectionType(), article.isAssigned(), article.getAssignedTo(), article.getDateOfIssue(), article.getDefective() );
+    }
+
+    public listAllDTO mapToListAllDTO(Article article){
+        return new listAllDTO(article.getArticleId(), article.getArticle(), article.getMake());
+    }
+
+    public getUnassignedDTO mapToGetUnassignedDTO(Article article){
+        return new getUnassignedDTO(article.getArticleId(),article.getArticle(),article.getQuantity(),article.getMake(), article.getConnectionType());
     }
 
     private Article mapToEntity(InventoryDTO inventoryDTO){
@@ -114,9 +126,20 @@ public class InventoryService {
         return inventoryDAO.findByName(articleName);
     }
 
-    public List<Article> findArticleByAssigned(){
-        return inventoryDAO.findByAssigned();
+    public List<getUnassignedDTO> findArticleByAssigned(){
+        List<Article> articles = inventoryDAO.findByAssigned();
+        return articles.stream()
+                .map(this::mapToGetUnassignedDTO)
+                .collect(Collectors.toList());
+//        return inventoryDAO.findByAssigned();
     }
+
+//    public List<listAllDTO> getAllArticle(){
+//        List<Article> articles = inventoryDAO.findAll();
+//        return articles.stream()// Convert the list to a stream
+//                .map(this::mapToListAllDTO) // Convert each Article to InventoryDTO
+//                .collect(Collectors.toList()); // Collect the transformed DTOs into a List
+//    }
 
     @Transactional
     public void deleteMultipleArticles(List<Long> articleIds){
