@@ -24,11 +24,11 @@ public class Article {
     private Employee assignedTo;
 
     @Column(nullable = false)
-    private Boolean assigned = false;
+    private boolean assigned = false;
     @Column
     private LocalDate dateOfIssue;
-    @Column(nullable = false)
-    private Boolean defective = false;
+    @Column
+    private boolean defective = false;
 
     public Long getArticleId() {
         return articleId;
@@ -94,7 +94,7 @@ public class Article {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public Boolean getAssigned() {
+    public boolean getAssigned() {
         return assigned;
     }
 
@@ -102,7 +102,7 @@ public class Article {
         this.assigned = assigned;
     }
 
-    public Boolean getDefective() {
+    public boolean getDefective() {
         return defective;
     }
 

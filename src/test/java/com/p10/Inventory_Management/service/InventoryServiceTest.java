@@ -4,6 +4,7 @@ import com.p10.Inventory_Management.dao.EmployeeDAO;
 import com.p10.Inventory_Management.dao.InventoryDAO;
 import com.p10.Inventory_Management.dto.InventoryDTO;
 import com.p10.Inventory_Management.entity.Article;
+import com.p10.Inventory_Management.entity.Employee;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -11,12 +12,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class InventoryServiceTest {
@@ -57,4 +58,24 @@ public class InventoryServiceTest {
         assertNotNull(result,"Expected a non-null InventoryDTO");
         assertEquals(10, result.getQuantity());
     }
+
+    @Test
+    public void testDeleteArticle() {
+        inventoryService.deleteArticleById(1L);
+        verify(inventoryDAO,times(1)).delete(1L);
+    }
+
+    @Test
+    public void testAssignArticleToEmployee() {
+        Article article = new Article();
+        article.setAssigned(false);
+        Employee employee = new Employee();
+        when(inventoryDAO.findById(1L)).thenReturn(Optional.of(article));
+        when(inventoryDAO.save(any(Article.class))).thenReturn(article);
+        when(employeeDAO.getEmployeeById(1L)).thenReturn(Optional.of(employee));
+
+        InventoryDTO result = inventoryService.assignArticleToEmployee(1L,1L, LocalDate.now());
+        assertTrue(result.isAssigned());
+    }
+
 }
