@@ -11,7 +11,7 @@ public class InventoryDTOTest {
     @Test
     public void testDTOCreation(){
         InventoryDTO inventoryDTO = new InventoryDTO("Laptop",5,"Dell","Wi-Fi",false,null,null,false);
-        Assertions.assertEquals("Laptop",inventoryDTO.getArticle());
+//        Assertions.assertEquals("Laptop",inventoryDTO.getArticle());
         assertEquals("Laptop",inventoryDTO.getArticle());
     }
 
