@@ -10,6 +10,7 @@ public class Employee {
     private Long empId;
     private String empName;
     private String teamName;
+    private String role;
 
     public Long getEmpId() {
         return empId;
@@ -33,5 +34,13 @@ public class Employee {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

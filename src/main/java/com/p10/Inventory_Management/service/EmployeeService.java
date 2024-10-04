@@ -30,7 +30,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO mapToDTO(Employee employee) {
-        return new EmployeeDTO(employee.getEmpId(), employee.getEmpName(), employee.getTeamName());
+        return new EmployeeDTO(employee.getEmpId(), employee.getEmpName(), employee.getTeamName(), employee.getRole());
     }
 
 }
