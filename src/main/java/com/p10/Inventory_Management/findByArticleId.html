@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Find Article</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Find Article by ID</h1>
+
+<label for="articleIdInput">Article ID:</label>
+<input type="number" id="articleIdInput">
+<button id="findArticleButton">Find Article</button>
+
+<pre id="articleDetails"></pre>
+
+<script>
+  document.getElementById('findArticleButton').addEventListener('click', async () => {
+    const articleId = document.getElementById('articleIdInput').value;
+
+    try {
+      const response = await fetch(`/api/article/find/${articleId}`);
+
+      if (!response.ok) {
+          if (response.status === 404) {
+              throw new Error("Article not found.");  // More specific error message
+          } else {
+              const errorData = await response.json();  // Attempt to parse error response
+              throw new Error(`Server error ${response.status}: ${errorData.message || 'Unknown error'}`); // Detailed error message
+          }
+
+      }
+
+
+
+      const articleData = await response.json();
+      document.getElementById('articleDetails').textContent = JSON.stringify(articleData, null, 2);
+
+
+
+    } catch (error) {
+      document.getElementById('articleDetails').textContent = `Error: ${error.message}`;
+    }
+  });
+</script>
+
+</body>
+</html>

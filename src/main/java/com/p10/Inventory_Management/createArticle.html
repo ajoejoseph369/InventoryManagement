@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Article</title>
+    <link rel="stylesheet" href="styles.css">  </head>
+<body>
+
+<h1>Create New Article</h1>
+
+<form id="createArticleForm">
+    <label for="article">Article Name:</label><br>
+    <input type="text" id="article" name="article" required><br>
+
+    <label for="make">Make:</label><br>
+    <input type="text" id="make" name="make" required><br>
+
+    <label for="quantity">Quantity:</label><br>
+    <input type="number" id="quantity" name="quantity" required><br>
+
+    <button type="button" onclick="createArticle()">Create Article</button>
+</form>
+
+<pre id="createResult"></pre>
+
+<script>
+  async function createArticle() {
+    const articleData = {
+      article: document.getElementById('article').value,
+      make: document.getElementById('make').value,
+      quantity: parseInt(document.getElementById('quantity').value) // Parse quantity to integer
+    };
+
+
+    try {
+      const response = await fetch('/api/article/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(articleData)
+      });
+
+      if (!response.ok) { // Check for errors
+        const errorData = await response.json(); // Parse error response
+        throw new Error(`Server error: ${response.status} - ${errorData.message || 'Unknown error'}`); // More informative error message
+      }
+
+
+      const createdArticle = await response.json();
+
+      document.getElementById('createResult').textContent = JSON.stringify(createdArticle, null, 2);
+
+      // Clear form after successful submission (optional)
+      document.getElementById('createArticleForm').reset();
+
+    } catch (error) {
+      document.getElementById('createResult').textContent = `Error: ${error.message}`; // Display error message
+    }
+
+  }
+
+
+
+</script>
+
+</body>
+</html>
+

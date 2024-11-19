@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Article Quantity</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Update Article Quantity</h1>
+
+<label for="articleIdUpdate">Article ID:</label>
+<input type="number" id="articleIdUpdate" name="articleIdUpdate">
+
+<label for="quantityUpdate">New Quantity:</label>
+<input type="number" id="quantityUpdate" name="quantityUpdate">
+
+<button onclick="updateQuantity()">Update Quantity</button>
+
+<pre id="updateResult"></pre>
+
+<script>
+async function updateQuantity() {
+    const articleId = document.getElementById('articleIdUpdate').value;
+    const quantity = document.getElementById('quantityUpdate').value;
+
+
+    try {
+        const response = await fetch(`/api/article/updateQuantity/${articleId}?quantity=${quantity}`, {
+            method: 'PUT'
+        });
+
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error("Article not found.");
+            }
+            // Handle other error statuses as needed
+            const errorData = await response.json();
+            throw new Error(`Error ${response.status}: ${errorData.message || "Unknown Error"}`);
+
+
+        }
+
+        const updatedArticle = await response.json();
+        document.getElementById('updateResult').textContent = JSON.stringify(updatedArticle, null, 2);
+
+    } catch (error) {
+
+        document.getElementById('updateResult').textContent = `Error: ${error.message}`;
+
+    }
+}
+</script>
+
+</body>
+</html>
+

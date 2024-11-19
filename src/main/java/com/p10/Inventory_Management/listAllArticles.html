@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>List All Articles</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>All Articles</h1>
+
+<button id="listArticlesButton">List Articles</button>
+<div id="articleList">
+  </div>
+
+<script>
+  document.getElementById('listArticlesButton').addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/article/listAll');
+      const articles = await response.json();
+
+      const articleListDiv = document.getElementById('articleList');
+      articleListDiv.innerHTML = ''; // Clear previous results
+
+      if (articles.length === 0) {
+        articleListDiv.textContent = "No articles found.";
+        return;
+      }
+
+      const table = document.createElement('table');
+      const headerRow = table.insertRow();
+      // Add header cells dynamically based on the first article's properties
+      Object.keys(articles[0]).forEach(key => {
+        const headerCell = headerRow.insertCell();
+        headerCell.textContent = key;
+      });
+
+
+
+      articles.forEach(article => {
+        const row = table.insertRow();
+        Object.values(article).forEach(value => {
+          const cell = row.insertCell();
+          cell.textContent = value;
+        });
+      });
+
+
+      articleListDiv.appendChild(table);
+
+
+
+    } catch (error) {
+      document.getElementById('articleList').textContent = `Error: ${error.message}`;
+    }
+  });
+
+
+
+
+</script>
+
+</body>
+</html>
